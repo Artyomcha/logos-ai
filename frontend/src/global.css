@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  background: #f4f6fa;
+  color: #232226;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+} 

@@ -1,0 +1,38 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #e0e0e0;
+  padding: 40px;
+  margin-top: 32px;
+}
+.title {
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+.list {
+  list-style: none;
+  padding: 0;
+}
+.item {
+  margin-bottom: 24px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 24px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.critical {
+  color: red;
+}
+.dispute {
+  color: orange;
+}
+.default {
+  color: #222;
+}
+.noNotifications {
+  font-size: 18px;
+} 

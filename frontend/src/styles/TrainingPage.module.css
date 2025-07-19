@@ -1,0 +1,87 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #e0e0e0;
+  padding: 40px;
+  margin-top: 32px;
+}
+.title {
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+.caseList {
+  list-style: none;
+  padding: 0;
+}
+.caseItem {
+  margin-bottom: 24px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 24px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+.caseStatus {
+  margin-left: 24px;
+  font-weight: 500;
+}
+.button {
+  margin-left: auto;
+  background: #3a7bd5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.backButton {
+  margin-bottom: 24px;
+  background: none;
+  border: none;
+  color: #3a7bd5;
+  font-size: 18px;
+  cursor: pointer;
+}
+.sectionTitle {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.agent {
+  margin: 24px 0;
+  color: #888;
+  font-size: 18px;
+}
+.select {
+  font-size: 18px;
+  margin-left: 8px;
+  border-radius: 8px;
+  padding: 6px;
+}
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin: 16px 0;
+}
+.sendButton {
+  font-size: 18px;
+  padding: 10px 32px;
+  border-radius: 8px;
+  border: none;
+  background: #00e0d3;
+  color: #fff;
+  margin-right: 16px;
+}
+.result {
+  margin-top: 16px;
+  font-size: 18px;
+} 

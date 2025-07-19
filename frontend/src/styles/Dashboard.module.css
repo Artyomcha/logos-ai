@@ -1,0 +1,127 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #2d2c2f;
+}
+.nav {
+  width: 280px;
+  background: #232226;
+  color: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #222;
+}
+.logoBlock {
+  width: 100%;
+  padding: 32px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #00e0d3 60%, #3a7bd5 100%);
+  border-radius: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 36px;
+  color: #fff;
+}
+.logoText {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: #fff;
+}
+.logoSub {
+  font-size: 13px;
+  color: #b0b0b0;
+  margin-bottom: 16px;
+}
+.menu {
+  width: 100%;
+  flex: 1;
+}
+.menuButton {
+  width: 90%;
+  margin: 12px 0;
+  padding: 18px 0;
+  background: #35343a;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.menuButtonActive {
+  background: #444;
+  box-shadow: 0 2px 8px #2222;
+}
+.logout {
+  margin: 32px 0 24px 0;
+  width: 90%;
+  background: none;
+  color: #bbb;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.main {
+  flex: 1;
+  background: #f4f6fa;
+  min-height: 100vh;
+}
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  padding: 24px 40px 0 40px;
+  min-height: 60px;
+}
+.date {
+  font-size: 22px;
+  font-weight: 500;
+  color: #232226;
+  white-space: pre-line;
+}
+.notifButton {
+  position: relative;
+  background: #bdbdbd;
+  color: #232226;
+  border: none;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 500;
+  padding: 10px 36px;
+  cursor: pointer;
+  min-width: 180px;
+  text-align: right;
+}
+.notifCount {
+  position: absolute;
+  top: 6px;
+  right: 18px;
+  background: red;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+.content {
+  padding: 24px 40px 40px 40px;
+} 

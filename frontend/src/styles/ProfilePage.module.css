@@ -1,0 +1,61 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #e0e0e0;
+  padding: 40px;
+  margin-top: 32px;
+}
+.title {
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+.info {
+  margin-bottom: 32px;
+  font-size: 20px;
+}
+.section {
+  margin-bottom: 40px;
+}
+.sectionTitle {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.input {
+  width: 260px;
+  margin-right: 12px;
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.button {
+  font-size: 16px;
+  padding: 8px 24px;
+  border-radius: 8px;
+  border: none;
+  background: #00e0d3;
+  color: #fff;
+  margin-right: 12px;
+  cursor: pointer;
+}
+.buttonSecondary {
+  background: #e3eaff;
+  color: #232226;
+}
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+.success {
+  color: green;
+  margin-top: 12px;
+  font-size: 16px;
+} 
