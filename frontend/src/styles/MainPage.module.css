@@ -1,0 +1,133 @@
+.mainWrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: #0B0C1E;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 48px 64px;
+  box-sizing: border-box;
+  font-family: 'Montserrat', Arial, sans-serif;
+  /* НЕ нужно height: 100% или min-height: 100vh! */
+}
+
+
+.title {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 28px;
+  color: #fff;
+}
+
+.sectionWrapper{
+  align-items: center;
+}
+.sectionTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 48px 0 24px 0;
+  color: #fff;
+}
+.iframeBlock {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 48px;
+  border-radius: 18px;
+  background: #181A2A;
+  box-shadow: 0 2px 16px #00000033;
+}
+.employeeTableWrapper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 108px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+}
+.employeeTableHeader {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;
+  background: rgba(24,26,42,0.72);
+  border-radius: 16px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #b0d8ff;
+  margin-bottom: 8px;
+}
+.employeeRow {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  background: rgba(24,26,42,0.92);
+  border-radius: 16px;
+  padding: 18px 32px;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px #00000022;
+}
+.employeeCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.employeeAvatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #23204A;
+  margin-right: 8px;
+}
+.employeeName {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.iframe {
+  border-radius: 18px;
+  background: #181A2A;
+  width: 100%;
+  height: 480px;
+  border: none;
+  display: block;
+}
+.employeeCellName {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.employeeCellBold {
+  font-weight: 700;
+}
+.ratingGreen {
+  color: #7ed957;
+  font-weight: 700;
+}
+.ratingOrange {
+  color: #ffb300;
+  font-weight: 700;
+}
+.ratingRed {
+  color: #ff0000;
+  font-weight: 700;
+}
+.ratingDefault {
+  color: #fff;
+  font-weight: 700;
+}
+.errorsRed {
+  color: #ff0000;
+  font-weight: 700;
+}
+.errorsOrange {
+  color: #ffb300;
+  font-weight: 700;
+} 
+
+.call {
+  align-self: center;
+}

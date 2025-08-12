@@ -1,0 +1,39 @@
+.topbar {
+  width: 100%;
+  background: #0B0C1E;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36px 64px 20px 64px;
+  border-bottom: 2px solid rgba(176, 216, 255, 0.18);
+  min-height: 140px;
+}
+.profileInfo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 24px;
+  border: 2px solid #23204A;
+}
+.name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+.role {
+  font-size: 18px;
+  color: #B4C7E7;
+  margin-top: 2px;
+}
+.logo {
+  height: 92px;
+  width: auto;
+}
+
+

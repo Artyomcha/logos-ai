@@ -1,100 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Sidebar from '../components/Sidebar';
+import Topbar from '../components/Topbar';
+import MainPage from './MainPage';
+import EmployeeMainPage from './EmployeeMainPage';
+import CallsPage from './CallsPage';
+import CallDetailsPage from './CallDetailsPage';
 import ProfilePage from './ProfilePage';
 import ReportsPage from './ReportsPage';
 import EmployeesPage from './EmployeesPage';
 import ScriptsPage from './ScriptsPage';
 import TrainingPage from './TrainingPage';
-import StatsPage from './StatsPage';
-import NotificationsPage from './NotificationsPage';
+import EmployeeDetailPage from './EmployeeDetailsPage';
 import styles from '../styles/Dashboard.module.css';
+import { getProfile } from '../services/api';
 
-const sections = {
-  profile: 'Личный кабинет',
-  reports: 'Отчёты',
-  employees: 'Сотрудники',
-  scripts: 'Скрипты',
-  training: 'Обучение',
-  stats: 'Статистика',
-  notifications: 'Уведомления',
-};
+export default function Dashboard({ role, onLogout }) {
+  const [section, setSection] = useState('main');
+  const [showProfilePage, setShowProfilePage] = useState(false);
+  const [selectedCallId, setSelectedCallId] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
 
-function getDateString() {
-  const d = new Date();
-  const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
-  return `${d.toLocaleDateString('ru-RU')}\n${days[d.getDay()]}`;
-}
+  const loadProfile = async () => {
+    try {
+      const data = await getProfile();
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      setError(error.message);
+      if (error.message.includes('Сессия истекла') || error.message.includes('Токен не найден')) {
+        onLogout();
+      }
+    }
+  };
 
-const Dashboard = ({ role, onLogout }) => {
-  const [section, setSection] = useState('profile');
-  const [notifCount] = useState(3); // пример
-
-  // Разделы для сотрудника и руководителя
-  const nav = [
-    { key: 'profile', label: sections.profile },
-    ...(role === 'manager' ? [
-      { key: 'reports', label: sections.reports },
-      { key: 'employees', label: sections.employees },
-      { key: 'scripts', label: sections.scripts },
-    ] : []),
-    ...(role === 'employee' ? [
-      { key: 'training', label: sections.training },
-      { key: 'stats', label: sections.stats },
-    ] : []),
-  ];
+  useEffect(() => {
+    loadProfile();
+  }, [onLogout]);
 
   let content = null;
-  if (section === 'profile') content = <ProfilePage />;
-  else if (section === 'reports') content = <ReportsPage />;
-  else if (section === 'employees') content = <EmployeesPage />;
-  else if (section === 'scripts') content = <ScriptsPage />;
-  else if (section === 'training') content = <TrainingPage />;
-  else if (section === 'stats') content = <StatsPage />;
-  else if (section === 'notifications') content = <NotificationsPage role={role} />;
+  if (showProfilePage) {
+    content = <ProfilePage profile={profile} setProfile={setProfile} onProfileUpdate={loadProfile} />;
+  } else if (section === 'main') {
+    // Для employee показываем EmployeeMainPage, для остальных - MainPage
+    if (role === 'employee') {
+      content = <EmployeeMainPage />;
+    } else {
+      content = <MainPage />;
+    }
+  } else if (section === 'calls') {
+    // Страница звонков только для employee
+    if (role === 'employee') {
+      if (selectedCallId) {
+        content = <CallDetailsPage callId={selectedCallId} onBack={() => setSelectedCallId(null)} />;
+      } else {
+        content = <CallsPage onCallSelect={setSelectedCallId} />;
+      }
+    }
+  } else if (section === 'reports') {
+    content = <ReportsPage />;
+  } else if (section === 'employees') {
+    content = <EmployeesPage />;
+  } else if (section === 'files') {
+    content = <ScriptsPage />;
+  } else if (section === 'training') {
+    content = <TrainingPage />;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.layout}>
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <h2>Ошибка</h2>
+          <p>{error}</p>
+          <button onClick={onLogout}>Войти снова</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.dashboard}>
-      {/* Левое меню */}
-      <nav className={styles.nav}>
-        <div className={styles.logoBlock}>
-          {/* Логотип */}
-          <div className={styles.logo}>W</div>
-          <div className={styles.logoText}>LOGOS <span style={{ color: '#00e0d3' }}>AI</span></div>
-          <div className={styles.logoSub}>Аналитическая система</div>
-        </div>
-        <div className={styles.menu}>
-          {nav.map(item => (
-            <button
-              key={item.key}
-              onClick={() => setSection(item.key)}
-              className={styles.menuButton + (section === item.key ? ' ' + styles.menuButtonActive : '')}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <button onClick={onLogout} className={styles.logout}>Выйти</button>
-      </nav>
-      {/* Правая часть */}
-      <div className={styles.main}>
-        {/* Верхняя панель */}
-        <div className={styles.topBar}>
-          <div className={styles.date}>{getDateString()}</div>
-          <button
-            onClick={() => setSection('notifications')}
-            className={styles.notifButton}
-          >
-            Уведомления
-            {notifCount > 0 && (
-              <span className={styles.notifCount}>
-                {notifCount}
-              </span>
-            )}
-          </button>
-        </div>
-        <div className={styles.content}>{content}</div>
+    <div className={styles.layout}>
+      <Topbar profile={profile} onProfileClick={() => setShowProfilePage(true)} role={role} />
+      <div className={styles.body}>
+        <Sidebar 
+          section={section} 
+          setSection={s => { setSection(s); setShowProfilePage(false); }} 
+          onLogout={onLogout} 
+          role={role}
+        />
+        <main className={styles.content}>
+          {content}
+        </main>
       </div>
     </div>
   );
-};
-
-export default Dashboard; 
+} 

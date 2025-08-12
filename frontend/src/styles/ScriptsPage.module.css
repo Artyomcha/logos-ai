@@ -1,39 +1,168 @@
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px #e0e0e0;
-  padding: 40px;
-  margin-top: 32px;
+  background: #0B0C1E;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0;
+}
+.fixedWindow {
+  background: #0B0C1E;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 0 36px 0;
+  overflow: hidden;
 }
 .title {
-  font-weight: 700;
-  font-size: 28px;
-  margin-bottom: 32px;
-}
-.section {
-  margin-bottom: 40px;
-}
-.sectionTitle {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-.input {
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-.fileName {
-  color: #3a7bd5;
-  font-size: 16px;
-  margin-top: 8px;
-}
-.button {
-  padding: 12px 32px;
-  background: #00e0d3;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 18px;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
+  width: 90%;
+  text-align: left;
+}
+.uploadForm {
+  width: 90%;
+  height: 180px;
+  background: #23243a;
+  border: 3px solid #bfc7e0;
+  border-radius: 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: relative;
+  margin-bottom: 18px;
+  margin-top: 0;
+  box-sizing: border-box;
+  padding: 0 32px 24px 32px;
   cursor: pointer;
-} 
+  transition: border 0.2s, background 0.2s;
+}
+.uploadForm:hover, .uploadForm:focus-within {
+  border-color: #ffb300;
+  background: #2e3050;
+}
+.uploadForm input[type="file"] {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.uploadForm::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 32px;
+  bottom: 24px;
+  width: 36px;
+  height: 36px;
+  background: url('data:image/svg+xml;utf8,<svg width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="18" fill="%2323243a"/><path d="M27 12.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-13.5A2.25 2.25 0 0 1 9 23.25v-10.5A2.25 2.25 0 0 1 11.25 10.5h13.5A2.25 2.25 0 0 1 27 12.75Z" stroke="%23bfc7e0" stroke-width="1.5"/><path d="M14.25 16.5l3 3 3-3" stroke="%23bfc7e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 1;
+}
+.description {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 24px 0;
+  width: 90%;
+  text-align: left;
+}
+.subtitle {
+  font-size: 1.5rem;
+  margin: 32px 0 18px 0;
+  font-weight: 500;
+  color: #fff;
+  width: 90%;
+  text-align: left;
+}
+.fileList {
+  width: 90%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  max-height: 40vh;
+  margin-bottom: 0;
+}
+.fileItem {
+  background: rgba(44, 42, 66, 0.5);
+  border-radius: 18px;
+  border: 2px solid #393a5a;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: #fff;
+  box-shadow: 0 2px 12px #00000022;
+  transition: background 0.2s, border 0.2s;
+}
+.fileItem:hover {
+  background: #23204A;
+}
+.fileItem span {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+}
+.iconGroup {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: 18px;
+}
+.iconBtn {
+  font-size: 24px;
+  color: #bfc7e0;
+  text-decoration: none;
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  height: 32px;
+}
+.iconBtn:hover {
+  color: #ffb300;
+  transform: scale(1.12);
+}
+@media (max-width: 900px) {
+  .fixedWindow {
+    width: 99vw;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    height: 98vh;
+    padding: 12px 0 12px 0;
+  }
+  .title, .description, .subtitle, .uploadForm, .fileList {
+    width: 98vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+  }
+  .uploadForm {
+    height: 120px;
+    padding: 0 12px 12px 12px;
+  }
+  .subtitle, .description {
+    font-size: 1rem;
+  }
+  .fileItem {
+    font-size: 1rem;
+    padding: 0 8px;
+    height: 44px;
+  }
+}

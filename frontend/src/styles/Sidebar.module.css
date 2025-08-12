@@ -1,0 +1,79 @@
+.sidebar {
+  width: 320px;
+  background: #0B0C1E;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  min-height: 100vh;
+  padding: 48px 0 24px 0;
+  box-shadow: 2px 0 16px #00000022;
+  position: relative;
+  border-right: 2px solid rgba(176, 216, 255, 0.18);
+}
+.menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 24px;
+}
+.spacer {
+  flex: 1 1 auto;
+  width: 100%;
+}
+.menu button {
+  width: 100%;
+  min-width: 0;
+  max-width: 260px;
+  height: 72px;
+  padding: 0;
+  margin: 0 auto;
+  background: #15122E;
+  color: #fff;
+  border: 2px solid #23204A;
+  border-radius: 16px;
+  font-size: 26px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.5px;
+  box-shadow: none;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.92;
+}
+.menu button.active,
+.menu button:focus {
+  color: #fff;
+  border: 2px solid #B4C7E7;
+  opacity: 1;
+}
+.logout {
+  width: 100%;
+  max-width: 260px;
+  height: 72px;
+  padding: 0;
+  margin: 96px auto 0 auto;
+  background: #15122E;
+  color: #fff;
+  border: 2px solid #23204A;
+  border-radius: 16px;
+  font-size: 26px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.96;
+}
+.logout:hover {
+  background: #a00000;
+  border: 2px solid #a00000;
+  opacity: 1;
+}
