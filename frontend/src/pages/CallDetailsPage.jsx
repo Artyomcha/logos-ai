@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCallDetails } from '../services/api';
+import { getCallDetails, getCallAudioUrl, downloadCallAudio } from '../services/api';
 import styles from '../styles/CallDetailsPage.module.css';
 
 const CallDetailsPage = ({ callId, onBack }) => {
@@ -8,6 +8,8 @@ const CallDetailsPage = ({ callId, onBack }) => {
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [audioDuration, setAudioDuration] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const fetchCallDetails = async () => {
@@ -21,6 +23,8 @@ const CallDetailsPage = ({ callId, onBack }) => {
         // Устанавливаем URL аудио если он есть
         if (data.audio_url) {
           setAudioUrl(data.audio_url);
+          // Получаем длину аудио
+          await getAudioDuration(data.audio_url);
         }
       } catch (err) {
         console.error('CallDetailsPage - Error fetching call details:', err);
@@ -50,6 +54,25 @@ const CallDetailsPage = ({ callId, onBack }) => {
     }
   }, []);
 
+  // Функция для получения длительности аудио
+  const getAudioDuration = async (url) => {
+    try {
+      const audio = new Audio(url);
+      audio.addEventListener('loadedmetadata', () => {
+        const duration = Math.floor(audio.duration);
+        const minutes = Math.floor(duration / 60);
+        const seconds = duration % 60;
+        setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+      });
+      audio.addEventListener('error', () => {
+        setAudioDuration('0:00');
+      });
+    } catch (error) {
+      console.error('Error getting audio duration:', error);
+      setAudioDuration('0:00');
+    }
+  };
+
   const getScoreColor = (score) => {
     if (!score || score === '-') return '';
     const numScore = parseFloat(score);
@@ -73,58 +96,44 @@ const CallDetailsPage = ({ callId, onBack }) => {
 
   // Функции для работы с аудио
   const handlePlayAudio = () => {
-    if (!audioUrl) {
-      // Создаем моковый аудио URL для демонстрации
-      const mockAudioUrl = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT';
-      setAudioUrl(mockAudioUrl);
+    if (!callDetails.audio_url) {
+      alert('Аудио файл для этого звонка не найден');
+      return;
     }
-    
-    setIsPlaying(!isPlaying);
-    
-    // Создаем аудио элемент для воспроизведения
+
     if (!window.audioPlayer) {
       window.audioPlayer = new Audio();
     }
-    
+
     if (isPlaying) {
-      // Останавливаем воспроизведение
       window.audioPlayer.pause();
-      window.audioPlayer.currentTime = 0;
+      setIsPlaying(false);
     } else {
-      // Начинаем воспроизведение
-      window.audioPlayer.src = audioUrl;
-      window.audioPlayer.play().catch(e => {
-        console.log('Audio play failed:', e);
-        // Если реальный аудио не работает, показываем уведомление
-        alert('Аудио файл недоступен для воспроизведения');
-      });
+      window.audioPlayer.src = callDetails.audio_url;
+      window.audioPlayer.play();
+      setIsPlaying(true);
     }
-    
-    console.log('Audio play/pause:', !isPlaying);
   };
 
-  const handleDownloadAudio = () => {
-    if (audioUrl) {
-      const link = document.createElement('a');
-      link.href = audioUrl;
-      link.download = `call_${callId}_${formatDate(callDetails?.recorded_at)}.wav`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      // Создаем моковый файл для скачивания
-      const mockAudioBlob = new Blob(['Mock audio data'], { type: 'audio/wav' });
-      const url = URL.createObjectURL(mockAudioBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `call_${callId}_${formatDate(callDetails?.recorded_at)}.wav`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+  const handleDownloadAudio = async () => {
+    if (!callDetails.audio_url) {
+      alert('Аудио файл для этого звонка не найден');
+      return;
     }
-    console.log('Audio download initiated');
+
+    try {
+      await downloadCallAudio(callId, callDetails.audio_url);
+    } catch (error) {
+      console.error('Error downloading audio:', error);
+      alert('Ошибка при скачивании аудио файла: ' + error.message);
+    }
   };
+
+  // Функция для переключения полноэкранного режима
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
 
   if (loading) {
     return (
@@ -146,6 +155,54 @@ const CallDetailsPage = ({ callId, onBack }) => {
     return (
       <div className={styles.error}>
         <p>Детали звонка не найдены</p>
+      </div>
+    );
+  }
+
+  // Если включен полноэкранный режим для транскрипта
+  if (isFullscreen) {
+    return (
+      <div className={styles.fullscreenOverlay}>
+        <div className={styles.fullscreenHeader}>
+          <h2>Текст звонка - Полный экран</h2>
+          <button 
+            className={styles.fullscreenCloseButton}
+            onClick={toggleFullscreen}
+          >
+            ✕ Закрыть
+          </button>
+        </div>
+        <div className={styles.fullscreenContent}>
+          {callDetails.transcript ? (
+            <div className={styles.fullscreenTranscript}>
+              {callDetails.transcript.map((message, index) => (
+                <div key={index} className={styles.fullscreenMessage}>
+                  {message.speaker === 'dialogue' ? (
+                    <div className={styles.fullscreenDialogue}>
+                      <div className={styles.fullscreenDialogueTitle}>Полный диалог:</div>
+                      <div className={styles.fullscreenDialogueText}>
+                        {message.text}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={`${styles.fullscreenMessageContainer} ${styles[`fullscreen${message.speaker.charAt(0).toUpperCase() + message.speaker.slice(1)}`]}`}>
+                      <div className={styles.fullscreenSpeaker}>
+                        {message.speaker === 'employee' ? 'Специалист' : 'Клиент'}
+                      </div>
+                      <div className={styles.fullscreenMessageText}>
+                        {message.text}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.fullscreenNoTranscript}>
+              <p>Транскрипт звонка недоступен</p>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -190,51 +247,68 @@ const CallDetailsPage = ({ callId, onBack }) => {
         <div className={styles.recordingHeader}>
           <span>Запись звонка</span>
           <div className={styles.recordingControls}>
-            <span className={styles.duration}>0:21</span>
-            <button 
-              className={`${styles.playButton} ${isPlaying ? styles.playing : ''}`}
-              onClick={handlePlayAudio}
-            >
-              <span className={styles.playIcon}>
-                {isPlaying ? '⏸' : '▶'}
-              </span>
-            </button>
-            <button 
-              className={styles.downloadButton}
-              onClick={handleDownloadAudio}
-            >
-              <span className={styles.downloadIcon}>⬇</span>
-            </button>
+            {callDetails.audio_url ? (
+              <>
+                <span className={styles.duration}>{audioDuration || '0:00'}</span>
+                <button 
+                  className={`${styles.playButton} ${isPlaying ? styles.playing : ''}`}
+                  onClick={handlePlayAudio}
+                  title="Воспроизвести аудио"
+                >
+                  <span className={styles.playIcon}>
+                    {isPlaying ? '⏸' : '▶'}
+                  </span>
+                </button>
+                <button 
+                  className={styles.downloadButton}
+                  onClick={handleDownloadAudio}
+                  title="Скачать аудио"
+                >
+                  <span className={styles.downloadIcon}>⬇</span>
+                </button>
+              </>
+            ) : (
+              <span className={styles.noAudio}>Аудио файл недоступен</span>
+            )}
           </div>
         </div>
       </div>
 
       <div className={styles.transcriptSection}>
-        <h2 className={styles.transcriptTitle}>Текст звонка</h2>
+        <div className={styles.transcriptHeader}>
+          <h2 className={styles.transcriptTitle}>Текст звонка</h2>
+          <button 
+            className={styles.fullscreenButton}
+            onClick={toggleFullscreen}
+            title="Открыть в полный экран"
+          >
+            ⛶ Полный текст
+          </button>
+        </div>
         <div className={styles.transcriptBox}>
           {callDetails.transcript ? (
             <div className={styles.transcriptContent}>
-              {callDetails.transcript.map((message, index) => (
-                <div key={index} className={styles.message}>
-                  {message.speaker === 'dialogue' ? (
-                    <div className={styles.fullDialogue}>
-                      <div className={styles.dialogueTitle}>Полный диалог:</div>
-                      <div className={styles.dialogueText}>
-                        {message.text}
-                      </div>
+                                {callDetails.transcript.map((message, index) => (
+                    <div key={index} className={styles.message}>
+                      {message.speaker === 'dialogue' ? (
+                        <div className={styles.fullDialogue}>
+                          <div className={styles.dialogueTitle}>Полный диалог:</div>
+                          <div className={styles.dialogueText}>
+                            {message.text}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className={`${styles.messageContainer} ${styles[message.speaker]}`}>
+                          <div className={styles.speaker}>
+                            {message.speaker === 'employee' ? 'Специалист' : 'Клиент'}
+                          </div>
+                          <div className={styles.messageText}>
+                            {message.text}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <>
-                      <div className={styles.speaker}>
-                        {message.speaker === 'employee' ? 'Алексей:' : 'Клиент:'}
-                      </div>
-                      <div className={styles.messageText}>
-                        {message.text}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
+                  ))}
             </div>
           ) : (
             <div className={styles.noTranscript}>

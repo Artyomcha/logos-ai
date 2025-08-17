@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 .callRow {
@@ -49,9 +50,6 @@
   background: #23204A;
 }
 
-.callRow:last-child {
-  border-bottom: none;
-}
 
 .callTime {
   width: 70px;
@@ -120,7 +118,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color: #00e0d3;
+  color: #fff;
   font-size: 1.2rem;
 }
 

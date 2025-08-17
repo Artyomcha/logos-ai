@@ -143,15 +143,45 @@
   font-size: 1.2rem;
 }
 
+.noAudio {
+  color: #f40000;
+  font-size: 1rem;
+  font-style: italic;
+}
+
 .transcriptSection {
   margin-bottom: 30px;
+}
+
+.transcriptHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .transcriptTitle {
   font-size: 1.5rem;
   font-weight: 600;
   color: white;
-  margin-bottom: 15px;
+  margin: 0;
+}
+
+.fullscreenButton {
+  background: #15122E;
+  color: #fff;
+  border: 2px solid #23204A;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.fullscreenButton:hover {
+  border: 2px solid #B4C7E7;
+  background: #23204A;
 }
 
 .transcriptBox {
@@ -159,6 +189,8 @@
   border-radius: 12px;
   padding: 20px;
   min-height: 300px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .transcriptContent {
@@ -169,10 +201,35 @@
   margin-bottom: 15px;
 }
 
+.messageContainer {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 4px solid;
+}
+
+.messageContainer.employee {
+  background: #f3f3f3;
+  border-left-color: #1C85FF;
+}
+
+.messageContainer.customer {
+  background: #f3f3f3;
+  border-left-color: #85beff;
+}
+
 .speaker {
   font-weight: 600;
-  color: #1C85FF;
   margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.messageContainer.employee .speaker {
+  color: #1C85FF;
+}
+
+.messageContainer.customer .speaker {
+  color: #85beff;
 }
 
 .messageText {
@@ -199,6 +256,8 @@
   padding: 15px;
   border-radius: 8px;
   border-left: 4px solid #1C85FF;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .noTranscript {
@@ -212,10 +271,137 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color: #00e0d3;
+  color: #fff;
   font-size: 1.2rem;
 }
 
 .error {
   color: #ff6b6b;
+}
+
+/* Fullscreen styles */
+.fullscreenOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0a0e1a;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.fullscreenHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.fullscreenHeader h2 {
+  color: white;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.fullscreenCloseButton {
+  background: #15122E;
+  color: #fff;
+  border: 2px solid #23204A;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.fullscreenCloseButton:hover {
+  border: 2px solid #B4C7E7;
+  background: #23204A;
+}
+
+.fullscreenContent {
+  flex: 1;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.fullscreenTranscript {
+  color: #333;
+}
+
+.fullscreenMessage {
+  margin-bottom: 25px;
+}
+
+.fullscreenMessageContainer {
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border-left: 6px solid;
+}
+
+.fullscreenMessageContainer.fullscreenEmployee {
+  background: #f3f3f3;
+  border-left-color: #1C85FF;
+}
+
+.fullscreenMessageContainer.fullscreenCustomer {
+  background: #f3f3f3;
+  border-left-color: #85beff;
+}
+
+.fullscreenSpeaker {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.fullscreenMessageContainer.fullscreenEmployee .fullscreenSpeaker {
+  color: #1C85FF;
+}
+
+.fullscreenMessageContainer.fullscreenCustomer .fullscreenSpeaker {
+  color: #85beff;
+}
+
+.fullscreenMessageText {
+  color: #333;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.fullscreenDialogue {
+  width: 100%;
+}
+
+.fullscreenDialogueTitle {
+  font-weight: 600;
+  color: #1C85FF;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.fullscreenDialogueText {
+  color: #333;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 6px solid #1C85FF;
+  font-size: 1.1rem;
+}
+
+.fullscreenNoTranscript {
+  color: #666;
+  text-align: center;
+  padding: 60px;
+  font-size: 1.2rem;
 }

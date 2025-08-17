@@ -560,16 +560,22 @@ export async function getCallDetails(callId) {
 // Получение URL для скачивания аудио файла звонка
 export function getCallAudioUrl(callId, audioUrl) {
   if (!audioUrl) {
+    console.log('getCallAudioUrl: audioUrl is null or empty');
     return null;
   }
   
+  console.log('getCallAudioUrl input:', { callId, audioUrl });
+  
   // Если URL уже полный (начинается с http), возвращаем как есть
   if (audioUrl.startsWith('http')) {
+    console.log('getCallAudioUrl: returning full URL:', audioUrl);
     return audioUrl;
   }
   
   // Иначе добавляем базовый URL
-  return `https://logos-backend-production.up.railway.app${audioUrl}`;
+  const fullUrl = `https://logos-backend-production.up.railway.app${audioUrl}`;
+  console.log('getCallAudioUrl: returning constructed URL:', fullUrl);
+  return fullUrl;
 }
 
 // Скачивание аудио файла звонка
@@ -584,27 +590,38 @@ export async function downloadCallAudio(callId, audioUrl) {
     throw new Error('URL аудио файла не найден');
   }
 
-  const res = await fetch(fullUrl, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
+  console.log('Downloading audio from URL:', fullUrl);
+
+  try {
+    const res = await fetch(fullUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Download error response:', errorText);
+      throw new Error(`Ошибка скачивания аудио файла: ${res.status} ${res.statusText}`);
     }
-  });
 
-  if (!res.ok) {
-    throw new Error('Ошибка скачивания аудио файла');
+    // Создаем blob и скачиваем файл
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `call_${callId}_audio${getFileExtension(audioUrl)}`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    console.log('Audio file downloaded successfully');
+  } catch (error) {
+    console.error('Download error:', error);
+    throw error;
   }
-
-  // Создаем blob и скачиваем файл
-  const blob = await res.blob();
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `call_${callId}_audio${getFileExtension(audioUrl)}`;
-  document.body.appendChild(a);
-  a.click();
-  window.URL.revokeObjectURL(url);
-  document.body.removeChild(a);
 }
 
 // Вспомогательная функция для получения расширения файла
